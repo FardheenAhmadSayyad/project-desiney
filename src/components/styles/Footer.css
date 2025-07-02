@@ -1,0 +1,17 @@
+/* File: src/components/Footer.css */
+
+.custom-footer {
+  background-color: #111827; /* Equivalent to Tailwind's bg-dark */
+  color: white;
+  text-align: center;
+  padding: 24px 16px;
+  font-size: 14px;
+}
+
+/* Responsive footer text size */
+@media (min-width: 768px) {
+  .custom-footer {
+    font-size: 16px;
+    padding: 32px;
+  }
+}

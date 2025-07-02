@@ -1,0 +1,25 @@
+/* File: src/components/Button.css */
+
+.custom-button {
+  background-color: #2563eb; /* Blue 600 */
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.custom-button:hover {
+  background-color: #1d4ed8; /* Blue 700 */
+}
+
+/* Responsive (larger button on big screens) */
+@media (min-width: 768px) {
+  .custom-button {
+    padding: 12px 20px;
+    font-size: 18px;
+  }
+}

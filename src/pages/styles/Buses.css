@@ -1,0 +1,138 @@
+/* Buses.css */
+
+.buses-page {
+  padding: 2rem;
+  background-color: #f5f8fa;
+  font-family: "Segoe UI", sans-serif;
+ min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bus-search-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+  margin-bottom: 2rem;
+  justify-content: space-between;
+}
+
+.bus-search-field {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bus-search-field label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.bus-search-field input {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.search-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.search-btn:hover {
+  background-color: #0056b3;
+}
+
+.bus-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.bus-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease;
+}
+
+.bus-card:hover {
+  transform: translateY(-4px);
+}
+
+.bus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bus-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.bus-rating {
+  font-size: 0.9rem;
+  color: #28a745;
+  font-weight: 500;
+}
+
+.bus-details {
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.book-btn {
+  background-color: #ff6600;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  margin-top: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.book-btn:hover {
+  background-color: #cc5200;
+}
+
+/* Responsive for mobile */
+@media screen and (max-width: 768px) {
+  .bus-search-wrapper {
+    flex-direction: column;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+
+  .bus-card {
+    padding: 1rem;
+  }
+
+  .bus-header h3 {
+    font-size: 1rem;
+  }
+
+  .book-btn {
+    width: 100%;
+  }
+}

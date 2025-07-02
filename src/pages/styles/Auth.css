@@ -1,0 +1,196 @@
+/* SignIn Full Page Layout */
+.signin-page {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+
+}
+
+.signin-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.signin-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #1d4ed8;
+}
+
+.signin-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.signin-form input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+}
+
+.signin-form input.error {
+  border-color: #ef4444;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: -12px;
+  margin-bottom: 12px;
+}
+
+.signin-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.signin-btn:hover {
+  background-color: #1e40af;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background-color: #e5e7eb;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  background-color: white;
+  padding: 0 12px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.signup-link span {
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.signup-link span:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .signin-box {
+    padding: 24px;
+  }
+
+  .signin-title {
+    font-size: 22px;
+  }
+}
+/* File: src/components/styles/Auth.css or Modal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-box {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.slide-container {
+  transition: transform 0.4s ease-in-out;
+}
+
+.slide-panel {
+  animation: fadeIn 0.4s ease;
+}
+
+.step-1 .slide-panel {
+  transform: translateX(0);
+}
+.step-2 .slide-panel {
+  transform: translateX(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.back-link {
+  margin-top: 10px;
+  color: #555;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+}

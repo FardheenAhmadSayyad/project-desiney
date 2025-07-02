@@ -1,0 +1,135 @@
+/* File: src/components/Navbar.css */
+
+.navbar {
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+}
+
+/* ✅ Brand (Icon + Text together) */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding-left: 24px;
+
+
+}
+.nav-login-btn {
+  background-color:#1a00e1 ;
+  color: rgb(255, 255, 255);
+  border-radius: 8px;
+  border:none;
+  padding: 10px 20px;
+  letter-spacing: 1px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+
+}
+.nav-login-btn:hover {
+  cursor: pointer;
+  background-color:#000000 ;
+  color: white;
+  transition: 0.7s;
+  font-size: medium;
+    font-weight: 600;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.navbar-icon {
+  height: 32px;
+  width: 32px;
+ color: #1b1b1aee;
+  margin-right: 8px;
+  padding-right: 10px;
+    padding-left: 24px;
+}
+
+.navbar-logo {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #1b1b1aee;
+  letter-spacing: 0.5;
+    font-weight: 600;
+}
+
+/* Desktop Links */
+.navbar-links {
+  display: none;
+}
+
+.navbar-links a {
+  margin-left: 40px;
+  text-decoration: none;
+  color: #000000;
+  font-size: 16px;
+  transition: color 0.3s;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  align-self: baseline;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+}
+
+.navbar-links a:hover {
+  color: #2563eb;
+}
+
+/* Mobile Toggle */
+.navbar-toggle {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Mobile Menu */
+.navbar-mobile {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: white;
+  border-top: 1px solid #e5e5e5;
+}
+
+.navbar-mobile a {
+  margin-bottom: 12px;
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  transition: color 0.3s;
+  font-weight: 600;
+  
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.navbar-mobile a:hover {
+  color: #2563eb;
+}
+
+/* ✅ Show desktop nav on large screens */
+@media (min-width: 768px) {
+  .navbar-links {
+    display: flex;
+  }
+
+  .navbar-toggle {
+    display: none;
+  }
+
+  .navbar-mobile {
+    display: none;
+  }
+}
