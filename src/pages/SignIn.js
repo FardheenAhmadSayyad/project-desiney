@@ -1,17 +1,22 @@
-// File: src/pages/SignIn.js
+// src/pages/SignIn.js
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import { login } from "../api/auth";
-import "./styles/Auth.css";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/userSlice";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 
 const SignIn = () => {
   const [step, setStep] = useState(1);
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, errormessage } = useSelector((state) => state.user);
 
   const validate = () => {
     const err = {};
@@ -26,29 +31,17 @@ const SignIn = () => {
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
-    setLoading(true);
-    try {
-      if (step === 1) {
-        // Simulate OTP sending or call an actual OTP API if exists
-        alert("OTP sent successfully!");
-        setStep(2);
+    if (step === 1) {
+      alert("OTP sent successfully!");
+      setStep(2);
+    } else {
+      const result = await dispatch(login({ mobile, otp }));
+      if (login.fulfilled.match(result)) {
+        alert("Login successful!");
+        navigate("/");
       } else {
-        // 🔐 Actual login call using your API
-        const response = await login(mobile, otp);
-        const { token } = response.data;
-
-        if (token) {
-          localStorage.setItem("token", token);
-          alert("Login successful!");
-          navigate("/");
-        } else {
-          alert("Login failed: Invalid token received.");
-        }
+        alert(result.payload || "Login failed. Try again.");
       }
-    } catch (err) {
-      alert(err?.response?.data?.message || "Login failed. Try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -57,33 +50,37 @@ const SignIn = () => {
       <div className="signin-box">
         <h2 className="signin-title">Sign In</h2>
         <form className="signin-form" onSubmit={handleSubmit}>
-          {step === 1 && (
-            <>
-              <label>Mobile Number</label>
-              <input
-                type="tel"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                placeholder="Enter mobile"
-                className={errors.mobile ? "error" : ""}
-              />
-              {errors.mobile && <span className="error-text">{errors.mobile}</span>}
-            </>
-          )}
+          <div className="signin-steps">
+            <div className={`step-wrapper step-${step}`}>
+              {/* Step 1: Phone */}
+              <div className="step">
+                <label>Mobile Number</label>
+                <PhoneInput
+                  country={"in"}
+                  value={mobile}
+                  onChange={setMobile}
+                  inputClass={errors.mobile ? "error" : ""}
+                  inputStyle={{ width: "100%" }}
+                  placeholder="Enter phone number"
+                />
+                {errors.mobile && <span className="error-text">{errors.mobile}</span>}
+              </div>
 
-          {step === 2 && (
-            <>
-              <label>OTP</label>
-              <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="Enter OTP"
-                className={errors.otp ? "error" : ""}
-              />
-              {errors.otp && <span className="error-text">{errors.otp}</span>}
-            </>
-          )}
+              {/* Step 2: OTP */}
+              <div className="step">
+                <label>OTP</label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Enter OTP"
+                  className={errors.otp ? "error" : ""}
+                />
+                {errors.otp && <span className="error-text">{errors.otp}</span>}
+                {error && <span className="error-text">{errormessage}</span>}
+              </div>
+            </div>
+          </div>
 
           <button type="submit" className="signin-btn" disabled={loading}>
             {loading ? "Please wait..." : step === 1 ? "Send OTP" : "Sign In"}

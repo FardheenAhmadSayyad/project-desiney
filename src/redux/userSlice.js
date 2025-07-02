@@ -1,131 +1,90 @@
-import { createSlice, createAsyncThunk, thunkAPI } from '@reduxjs/toolkit';
-//import Config from '../../global/config';
-//import { apiRequest } from '../../global/utils';
-import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate
-var CryptoJS = require("crypto-js");
-
+// src/redux/userSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { apiRequest } from '../global/utils';
+import CryptoJS from 'crypto-js';
 
 const initialState = {
   info: {},
   error: false,
   errormessage: '',
-  roleData: {}
-}
+  loading: false,
+};
 
 export const login = createAsyncThunk(
-  'login', async ({ email, password }) => {
-
-    const username = email;
-console.log(username);
-
+  'user/login',
+  async ({ mobile, otp }, { rejectWithValue }) => {
     try {
-
-     //Api
-   
+      const response = await apiRequest('POST', '/admin/login', { mobile, otp });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || 'Login failed');
     }
-    catch (error) {
-     
-    }
+  }
+);
 
-  });
-
-
-
-    }
-    catch (error) {
-      console.log((error.response) ? error.response : error);
-     if(error.response.data=="ERROR: Fetch staff: staff not exist."){
-      localStorage.clear();
-      if (userData.push) userData.push('/login');
-     }
-    }
-
-  });
-export const getUser = createAsyncThunk(
-  'getuser', async (push, fetch, firstLogin = false) => {
-    
+export const signup = createAsyncThunk(
+  'user/signup',
+  async (formData, { rejectWithValue }) => {
     try {
-     //ApiName
-     
-      //return response.data;
-
-
+      const response = await apiRequest('POST', '/customer-register', formData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || 'Signup failed');
     }
-    catch (error) {
-      console.log((error.response) ? error.response : error);
-      console.log(error.response.status);
-      if(error.response.status==400){
-        if(error.response.data=="ERROR: Fetch staff: staff not exist."){
-          push("/login");
-        }
-      }
-      else if(error.response.status==502){
-        push("/login");
-      }
-    }
+  }
+);
 
-
-  });
-
-
-
-
-
-const usersSlice = createSlice({
-  name: 'users',
-  initialState: initialState,
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
   reducers: {
-    // standard reducer logic, with auto-generated action types per reducer
+    logout(state) {
+      state.info = {};
+      localStorage.removeItem('log');
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(login.pending, (state, action) => {
+    builder
+      // Login
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.errormessage = '';
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = false;
+        state.info = action.payload;
+        if (action.payload?.token) {
+          const encrypted = CryptoJS.AES.encrypt(
+            JSON.stringify(action.payload.token),
+            'secret key 123'
+          ).toString();
+          localStorage.setItem('log', encrypted);
+        }
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errormessage = action.payload;
+      })
 
-    });
-    // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(login.fulfilled, (state, action) => {
-      // Add user to the state array
-
-      if (action.payload) {
-        state.info = action.payload.data;
-        const key = "f34b6f0266218f283317397a716b68e0";
-        const info = JSON.stringify(action.payload.data.detail.apiKey);
-       
-        const cipherText = CryptoJS.AES.encrypt(info, 'secret key 123').toString();
-        localStorage.setItem('log', cipherText);
-
-
-      }
-
-    });
-    builder.addCase(login.rejected, (state, action) => {
-
-      state.error = true;
-
-      state.errormessage = "Invalid username/password";
-    });
-
-
-
-    builder.addCase(getUser.pending, (state, action) => {
-
-    });
-    // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(getUser.fulfilled, (state, action) => {
-      // Add user to the state array
-    
-      state.roleData = action.payload.staff_detail;
-     
-    });
-    builder.addCase(getUser.rejected, (state, action) => {
-
-      state.error = true;
-
-      state.errormessage = "Invalid username/password";
-    });
-
+      // Signup
+      .addCase(signup.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.errormessage = '';
+      })
+      .addCase(signup.fulfilled, (state, action) => {
+        state.loading = false;
+        // handle signup success (optional: auto-login or navigate)
+      })
+      .addCase(signup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errormessage = action.payload;
+      });
   },
-})
+});
 
-
-
-export default usersSlice.reducer;
+export const { logout } = userSlice.actions;
+export default userSlice.reducer;
