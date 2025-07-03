@@ -1,5 +1,4 @@
 // src/pages/SignIn.js
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
@@ -7,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/userSlice";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-
+import "./styles/Auth.css"; // Keep your custom styles
 
 const SignIn = () => {
   const [step, setStep] = useState(1);
@@ -50,10 +49,15 @@ const SignIn = () => {
       <div className="signin-box">
         <h2 className="signin-title">Sign In</h2>
         <form className="signin-form" onSubmit={handleSubmit}>
-          <div className="signin-steps">
-            <div className={`step-wrapper step-${step}`}>
-              {/* Step 1: Phone */}
-              <div className="step">
+          <div className="step-container">
+            <div
+              className="step-slider"
+              style={{
+                transform: `translateX(-${(step - 1) * 100}%)`,
+              }}
+            >
+              {/* Step 1: Mobile Number */}
+              <div className="step-panel">
                 <label>Mobile Number</label>
                 <PhoneInput
                   country={"in"}
@@ -67,7 +71,7 @@ const SignIn = () => {
               </div>
 
               {/* Step 2: OTP */}
-              <div className="step">
+              <div className="step-panel">
                 <label>OTP</label>
                 <input
                   type="text"

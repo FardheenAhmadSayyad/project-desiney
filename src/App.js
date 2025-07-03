@@ -21,6 +21,7 @@ import AboutUs from "./pages/AboutUs";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import SignInModal from "./components/SignInModal";
 import ScrollToTop from "./components/ScrollToTop";
+import Profile from "./pages/Profile";
  
 function App() {
    const [showModal, setShowModal] = useState(true);
@@ -38,7 +39,7 @@ function App() {
             {/* Nested routing under Home */}
             
             <Route path="/" element={<Home />}>
-                <Route index element={<Navigate to="flights" replace />} />
+   <Route index element={<Navigate to="flights" replace />} />
   <Route path="//flights" element={<Flights />} />
   <Route path="//hotels" element={<Hotels />} />
   <Route path="//trains" element={<Trains />} />
@@ -46,26 +47,20 @@ function App() {
   <Route path="//cars" element={<Cars />} />
   <Route path="//holidays" element={<Holidays />} />
 </Route>
-       <Route path="navbar" element={<Navbar />}>
-  <Route path="navbar/flights" element={<Flights />} />
-  <Route path="navbar/hotels" element={<Hotels />} />
-  <Route path="navbar/trains" element={<Trains />} />
-  <Route path="navbar/buses" element={<Buses />} />
-  <Route path="navbar/cars" element={<Cars />} />
-  <Route path="navbar/holidays" element={<Holidays />} />
-</Route>
+     
               <Route path="flights" element={<Flights />} />
               <Route path="hotels" element={<Hotels />} />
               <Route path="trains" element={<Trains />} />
               <Route path="buses" element={<Buses />} />
               <Route path="cars" element={<Cars />} />
               <Route path="holidays" element={<Holidays />} />
-
+              <Route path="profile" element={<Profile />} />
+ 
 
             {/* Other routes like Contact */}
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
-                          <Route path="/signin" element={<SignIn />} />
+            <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/support" element={<Support />} />
               <Route path="/about" element={<AboutUs />} />
