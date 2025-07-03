@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaGlobe, FaTimes } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
 import './styles/Navbar.css';
 
 function Navbar() {
@@ -11,17 +13,17 @@ function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleProfile = () => setProfileOpen(!profileOpen);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    dispatch(logout());
     navigate('/signin');
   };
 
-  // Close profile dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -40,39 +42,58 @@ function Navbar() {
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
-        {/* Center: Logo */}
+        {/* Center: Brand */}
         <div className="navbar-brand">
           <FaGlobe className="navbar-icon" />
           <span className="navbar-logo">Desiney World</span>
         </div>
 
-        {/* Right: Profile Icon */}
-        <div className="nav-profile-wrapper mobile-right" ref={profileRef}>
-          <div className="nav-profile-icon" onClick={toggleProfile}>
-            <CgProfile />
-          </div>
-          {profileOpen && (
-            <div className="profile-dropdown">
-              <Link to="/profile">View Profile</Link>
-              <Link to="/bookings">My Bookings</Link>
-              <Link to="/settings">Settings</Link>
-              <button onClick={handleLogout}>Logout</button>
+        {/* Right: Profile (mobile) */}
+        {isAuthenticated && (
+          <div className="nav-profile-wrapper mobile-right" ref={profileRef}>
+            <div className="nav-profile-icon" onClick={toggleProfile}>
+              <CgProfile />
             </div>
-          )}
-        </div>
+            {profileOpen && (
+              <div className="profile-dropdown">
+                <Link to="/profile">View Profile</Link>
+                <Link to="/bookings">My Bookings</Link>
+                <Link to="/settings">Settings</Link>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        )}
 
-        {/* Desktop Nav Links */}
+        {/* Desktop Nav */}
         <nav className="navbar-links">
           <Link to="/">Home</Link>
           <Link to="/support">Contact</Link>
           <Link to="/about">About</Link>
-          <Link to="/signin">
-            <button className="nav-login-btn">Login</button>
-          </Link>
+
+          {!isAuthenticated ? (
+            <Link to="/signin">
+              <button className="nav-login-btn">Login</button>
+            </Link>
+          ) : (
+            <div className="nav-profile-wrapper desktop-profile" ref={profileRef}>
+              <div className="nav-profile-icon" onClick={toggleProfile}>
+                <CgProfile />
+              </div>
+              {profileOpen && (
+                <div className="profile-dropdown">
+                  <Link to="/profile">View Profile</Link>
+                  <Link to="/bookings">My Bookings</Link>
+                  <Link to="/settings">Settings</Link>
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu dropdown */}
       {menuOpen && (
         <div className="navbar-mobile">
           <Link to="/flights" onClick={() => setMenuOpen(false)}>Flights</Link>
@@ -84,7 +105,9 @@ function Navbar() {
           <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
           <Link to="/support" onClick={() => setMenuOpen(false)}>Support</Link>
           <Link to="/about" onClick={() => setMenuOpen(false)}>About</Link>
-          <Link to="/signin" onClick={() => setMenuOpen(false)}>Login</Link>
+          {!isAuthenticated && (
+            <Link to="/signin" onClick={() => setMenuOpen(false)}>Login</Link>
+          )}
         </div>
       )}
     </header>

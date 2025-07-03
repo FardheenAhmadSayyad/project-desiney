@@ -1,21 +1,23 @@
-// src/pages/SignIn.js
+// File: src/pages/SignIn.js
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../redux/userSlice";
+import { loginSuccess } from "../redux/userSlice";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import "./styles/Auth.css"; // Keep your custom styles
+import "./styles/Auth.css";
+import { GoogleLogin } from "@react-oauth/google";
 
 const SignIn = () => {
   const [step, setStep] = useState(1);
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { loading, error, errormessage } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const validate = () => {
     const err = {};
@@ -24,22 +26,23 @@ const SignIn = () => {
     return err;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const errs = validate();
-    setErrors(errs);
-    if (Object.keys(errs).length > 0) return;
+    const err = validate();
+    setErrors(err);
+    if (Object.keys(err).length > 0) return;
 
     if (step === 1) {
       alert("OTP sent successfully!");
       setStep(2);
     } else {
-      const result = await dispatch(login({ mobile, otp }));
-      if (login.fulfilled.match(result)) {
-        alert("Login successful!");
+      // Fake login simulation
+      if (otp === "1234") {
+        dispatch(loginSuccess({ mobile }));
+     
         navigate("/");
       } else {
-        alert(result.payload || "Login failed. Try again.");
+        alert("Invalid OTP");
       }
     }
   };
@@ -52,11 +55,9 @@ const SignIn = () => {
           <div className="step-container">
             <div
               className="step-slider"
-              style={{
-                transform: `translateX(-${(step - 1) * 100}%)`,
-              }}
+              style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
             >
-              {/* Step 1: Mobile Number */}
+              {/* Step 1: Mobile */}
               <div className="step-panel">
                 <label>Mobile Number</label>
                 <PhoneInput
@@ -77,11 +78,10 @@ const SignIn = () => {
                   type="text"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  placeholder="Enter OTP"
                   className={errors.otp ? "error" : ""}
+                  placeholder="Enter OTP"
                 />
                 {errors.otp && <span className="error-text">{errors.otp}</span>}
-                {error && <span className="error-text">{errormessage}</span>}
               </div>
             </div>
           </div>
@@ -100,7 +100,8 @@ const SignIn = () => {
 
           <GoogleLogin
             onSuccess={() => {
-              alert("Google Login Successful!");
+              alert("Google Login Success");
+              dispatch(loginSuccess({ provider: "google" }));
               navigate("/");
             }}
             onError={() => alert("Google Login Failed")}

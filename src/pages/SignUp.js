@@ -1,50 +1,45 @@
+// File: src/pages/SignUp.js
+
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../redux/userSlice";
+import { loginSuccess } from "../redux/userSlice";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import "./styles/Auth.css";
 
 const SignUp = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    password: "",
-  });
-
+  const [mobile, setMobile] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, errormessage } = useSelector((state) => state.user);
-
   const validate = () => {
     const err = {};
-    if (!formData.name) err.name = "Name is required";
-    if (!formData.email) err.email = "Email is required";
-    if (!formData.mobile) err.mobile = "Mobile number is required";
-    if (!formData.password || formData.password.length < 6)
-      err.password = "Password must be at least 6 characters";
+    if (!mobile) err.mobile = "Mobile number is required";
+    if (step === 2 && !otp) err.otp = "OTP is required";
     return err;
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const errs = validate();
-    setErrors(errs);
-    if (Object.keys(errs).length > 0) return;
+    const err = validate();
+    setErrors(err);
+    if (Object.keys(err).length > 0) return;
 
-    const result = await dispatch(signup(formData));
-    if (signup.fulfilled.match(result)) {
-      alert("Signup successful! Please login.");
-      navigate("/signin");
+    if (step === 1) {
+      alert("OTP sent to your number");
+      setStep(2);
     } else {
-      alert(result.payload || "Signup failed. Try again.");
+      if (otp === "1234") {
+        dispatch(loginSuccess({ mobile }));
+        alert("Sign Up successful!");
+        navigate("/");
+      } else {
+        alert("Invalid OTP");
+      }
     }
   };
 
@@ -53,59 +48,52 @@ const SignUp = () => {
       <div className="signin-box">
         <h2 className="signin-title">Sign Up</h2>
         <form className="signin-form" onSubmit={handleSubmit}>
-          <label>Name</label>
-          <input
-            name="name"
-            type="text"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your name"
-            className={errors.name ? "error" : ""}
-          />
-          {errors.name && <span className="error-text">{errors.name}</span>}
+          <div className="step-container">
+            <div
+              className="step-slider"
+              style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
+            >
+              {/* Step 1: Mobile Number */}
+              <div className="step-panel">
+                <label>Mobile Number</label>
+                <PhoneInput
+                  country="in"
+                  value={mobile}
+                  onChange={setMobile}
+                  inputClass={errors.mobile ? "error" : ""}
+                  inputStyle={{ width: "100%" }}
+                  placeholder="Enter mobile number"
+                />
+                {errors.mobile && <span className="error-text">{errors.mobile}</span>}
+              </div>
 
-          <label>Email</label>
-          <input
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            className={errors.email ? "error" : ""}
-          />
-          {errors.email && <span className="error-text">{errors.email}</span>}
+              {/* Step 2: OTP */}
+              <div className="step-panel">
+                <label>OTP</label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Enter OTP"
+                  className={errors.otp ? "error" : ""}
+                />
+                {errors.otp && <span className="error-text">{errors.otp}</span>}
+              </div>
+            </div>
+          </div>
 
-          <label>Mobile</label>
-          <input
-            name="mobile"
-            type="tel"
-            value={formData.mobile}
-            onChange={handleChange}
-            placeholder="Enter your mobile"
-            className={errors.mobile ? "error" : ""}
-          />
-          {errors.mobile && <span className="error-text">{errors.mobile}</span>}
-
-          <label>Password</label>
-          <input
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Create a password"
-            className={errors.password ? "error" : ""}
-          />
-          {errors.password && <span className="error-text">{errors.password}</span>}
-
-          {error && <span className="error-text">{errormessage}</span>}
-
-          <button type="submit" className="signin-btn" disabled={loading}>
-            {loading ? "Please wait..." : "Sign Up"}
+          <button type="submit" className="signin-btn">
+            {step === 1 ? "Send OTP" : "Sign Up"}
           </button>
 
+          {step === 2 && (
+            <p className="back-link" onClick={() => setStep(1)}>
+              ← Back
+            </p>
+          )}
+
           <p className="signup-link">
-            Already have an account?{" "}
-            <span onClick={() => navigate("/signin")}>Sign In</span>
+            Already have an account? <span onClick={() => navigate("/signin")}>Sign In</span>
           </p>
         </form>
       </div>
