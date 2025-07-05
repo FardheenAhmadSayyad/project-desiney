@@ -1,24 +1,46 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../redux/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
-import "../pages/styles/Auth.css";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import "../pages/styles/SignIn.css";
 
 const SignInModal = ({ onClose }) => {
-  const [mobile, setMobile] = useState("");
-  const [otp, setOtp] = useState("");
-  const [errors, setErrors] = useState({ mobile: false, otp: false });
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({ phone: "", otp: "", countryCode: "in" });
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const validate = () => {
+    const err = {};
+    if (!formData.phone || formData.phone.length < 10) err.phone = "Valid mobile number is required";
+    if (step === 2) {
+      if (!formData.otp) err.otp = "OTP is required";
+      else if (formData.otp.length !== 4) err.otp = "OTP must be 4 digits";
+    }
+    return err;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validation = {
-      mobile: mobile.trim() === "",
-      otp: otp.trim() === "",
-    };
-    setErrors(validation);
-    if (!validation.mobile && !validation.otp) {
-      alert("Signed in successfully!");
-      onClose(); // close modal on success
+    const err = validate();
+    setErrors(err);
+    if (Object.keys(err).length > 0) return;
+
+    if (step === 1) {
+      alert("OTP sent successfully!");
+      setStep(2);
+    } else {
+      if (formData.otp === "1234") {
+        dispatch(loginSuccess({ phone: formData.phone }));
+        alert("Signed in successfully!");
+        onClose();
+      } else {
+        alert("Invalid OTP");
+      }
     }
   };
 
@@ -30,33 +52,61 @@ const SignInModal = ({ onClose }) => {
           <button onClick={onClose} className="close-btn">&times;</button>
         </div>
         <form onSubmit={handleSubmit} className="signin-form">
-          <label>Mobile Number</label>
-          <input
-            type="tel"
-            placeholder="Enter mobile number"
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
-            className={errors.mobile ? "error" : ""}
-          />
-          {errors.mobile && <span className="error-text">Mobile is required</span>}
+          <div className="step-container">
+            <div
+              className="step-slider"
+              style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
+            >
+              {/* Step 1: Mobile Number */}
+              <div className="step-panel">
+                <label>Mobile Number</label>
+                <PhoneInput
+                  country={formData.countryCode}
+                  value={formData.phone}
+                  onChange={(val, data) => setFormData((prev) => ({
+                    ...prev,
+                    phone: val,
+                    countryCode: data.countryCode
+                  }))}
+                  inputClass={errors.phone ? "error" : ""}
+                  inputStyle={{ width: "100%" }}
+                  placeholder="Enter mobile number"
+                />
+                {errors.phone && <span className="error-text">{errors.phone}</span>}
+              </div>
 
-          <label>OTP</label>
-          <input
-            type="text"
-            placeholder="Enter OTP"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            className={errors.otp ? "error" : ""}
-          />
-          {errors.otp && <span className="error-text">OTP is required</span>}
+              {/* Step 2: OTP */}
+              <div className="step-panel">
+                <label>OTP</label>
+                <input
+                  type="text"
+                  maxLength={4}
+                  placeholder="Enter OTP"
+                  value={formData.otp}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, otp: e.target.value }))}
+                  className={errors.otp ? "error" : ""}
+                />
+                {errors.otp && <span className="error-text">{errors.otp}</span>}
+              </div>
+            </div>
+          </div>
 
-          <button type="submit" className="signin-btn">Sign In</button>
+          <button type="submit" className="signin-btn">
+            {step === 1 ? "Send OTP" : "Sign In"}
+          </button>
+
+          {step === 2 && (
+            <p className="back-link" onClick={() => setStep(1)}>
+              ← Back
+            </p>
+          )}
 
           <div className="divider"><span>or</span></div>
 
           <GoogleLogin
             onSuccess={() => {
               alert("Google Login Successful!");
+              dispatch(loginSuccess({ provider: "google" }));
               onClose();
             }}
             onError={() => alert("Google Login Failed")}

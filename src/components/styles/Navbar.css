@@ -6,29 +6,39 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  
 }
 
 .navbar-container {
   max-width: 100%;
   margin: 0 auto;
-  padding: 14px 60px;
+  padding: 8px 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
 }
+.navbar-container span{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+ 
+
+}
 
 .navbar-brand {
   display: flex;
-  align-items: center;
+  
   text-decoration: none;
+  
 }
+
 
 .navbar-icon {
   height: 32px;
   width: 32px;
   color: #1b1b1aee;
   margin-right: 8px;
+  
 }
 
 .navbar-logo {
@@ -36,6 +46,9 @@
   font-weight: 600;
   color: #1b1b1aee;
   letter-spacing: 0.5px;
+  padding-left: 40px;
+align-self:self-end;
+  
 }
 
 /* Desktop Links */
@@ -79,6 +92,7 @@
   border: none;
   color: #333;
   cursor: pointer;
+  align-self:flex-end;
 }
 
 .nav-profile-wrapper {
@@ -132,10 +146,11 @@
   display: flex;
   flex-direction: column;
   padding: 16px;
+  margin-left: 40px;
   background-color: white;
   border-top: 1px solid #e5e5e5;
+  font-family:'Times New Roman', Times, serif ;
 }
-
 .navbar-mobile a {
   margin-bottom: 12px;
   text-decoration: none;
@@ -164,8 +179,9 @@
 
   .navbar-logo {
     font-size: 14px;
+    padding-left: 0px;
+    
   }
-
   .navbar-icon {
     height: 24px;
     width: 24px;

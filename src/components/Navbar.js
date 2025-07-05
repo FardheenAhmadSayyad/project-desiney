@@ -14,7 +14,7 @@ function Navbar() {
   const profileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleProfile = () => setProfileOpen(!profileOpen);
@@ -49,7 +49,7 @@ function Navbar() {
         </div>
 
         {/* Right: Profile (mobile) */}
-        {isAuthenticated && (
+        {isAuthenticated && user && (
           <div className="nav-profile-wrapper mobile-right" ref={profileRef}>
             <div className="nav-profile-icon" onClick={toggleProfile}>
               <CgProfile />
@@ -58,7 +58,6 @@ function Navbar() {
               <div className="profile-dropdown">
                 <Link to="/profile">View Profile</Link>
                 <Link to="/bookings">My Bookings</Link>
-                <Link to="/settings">Settings</Link>
                 <button onClick={handleLogout}>Logout</button>
               </div>
             )}
@@ -76,19 +75,20 @@ function Navbar() {
               <button className="nav-login-btn">Login</button>
             </Link>
           ) : (
-            <div className="nav-profile-wrapper desktop-profile" ref={profileRef}>
-              <div className="nav-profile-icon" onClick={toggleProfile}>
-                <CgProfile />
-              </div>
-              {profileOpen && (
-                <div className="profile-dropdown">
-                  <Link to="/profile">View Profile</Link>
-                  <Link to="/bookings">My Bookings</Link>
-                  <Link to="/settings">Settings</Link>
-                  <button onClick={handleLogout}>Logout</button>
+            user && (
+              <div className="nav-profile-wrapper desktop-profile" ref={profileRef}>
+                <div className="nav-profile-icon" onClick={toggleProfile}>
+                  <CgProfile />
                 </div>
-              )}
-            </div>
+                {profileOpen && (
+                  <div className="profile-dropdown">
+                    <Link to="/profile">View Profile</Link>
+                    <Link to="/bookings">My Bookings</Link>
+                    <button onClick={handleLogout}>Logout</button>
+                  </div>
+                )}
+              </div>
+            )
           )}
         </nav>
       </div>

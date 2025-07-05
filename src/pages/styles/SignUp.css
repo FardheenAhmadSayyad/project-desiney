@@ -1,0 +1,188 @@
+/* Wrapper page */
+.signup-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f1f5f9;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.signup-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Title */
+.signup-title {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #1f2937;
+}
+
+/* Form wrapper */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Step Container & Slider */
+.step-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.step-slider {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+  width: 300%;
+}
+
+.step-panel {
+  flex: 0 0 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+
+/* Labels and inputs */
+label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+}
+
+input,
+select,
+.react-tel-input .form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+input:focus,
+.react-tel-input .form-control:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* Handle phone input layout */
+.react-tel-input {
+  width: 100%;
+}
+
+.react-tel-input .form-control {
+  height: 42px;
+  padding-left: 48px;
+  padding-right: 12px;
+}
+
+.react-tel-input .flag-dropdown {
+  border: none;
+  background: transparent;
+}
+
+/* Error styles */
+.error {
+  border-color: #ef4444 !important;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: -6px;
+  margin-bottom: 4px;
+}
+
+/* Success message */
+.success-message {
+  color: #10b981;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* Buttons */
+.signup-btn {
+  background-color: #2563eb;
+  color: #fff;
+  padding: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.signup-btn:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.03);
+}
+
+.signup-btn:active {
+  transform: scale(0.97);
+}
+
+/* Navigation links */
+.back-link,
+.signin-link span {
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.signin-link {
+  text-align: center;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.back-link {
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .signup-box {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .signup-title {
+    font-size: 24px;
+  }
+
+  input,
+  .react-tel-input .form-control {
+    font-size: 14px;
+    height: 40px;
+  }
+
+  .signup-btn {
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .step-panel {
+    padding-right: 0;
+  }
+}

@@ -6,23 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../redux/userSlice";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import "./styles/Auth.css";
+import "./styles/SignIn.css";
 import { GoogleLogin } from "@react-oauth/google";
 
 const SignIn = () => {
   const [step, setStep] = useState(1);
-  const [mobile, setMobile] = useState("");
-  const [otp, setOtp] = useState("");
+  const [formData, setFormData] = useState({ phone: "", otp: "", countryCode: "in" });
   const [errors, setErrors] = useState({});
-  const { loading, error, errormessage } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const validate = () => {
     const err = {};
-    if (!mobile) err.mobile = "Mobile number is required";
-    if (step === 2 && !otp) err.otp = "OTP is required";
+    if (!formData.phone) err.phone = "Mobile number is required";
+    if (step === 2 && !formData.otp) err.otp = "OTP is required";
     return err;
   };
 
@@ -33,13 +32,11 @@ const SignIn = () => {
     if (Object.keys(err).length > 0) return;
 
     if (step === 1) {
-      alert("OTP sent successfully!");
+     
       setStep(2);
     } else {
-      // Fake login simulation
-      if (otp === "1234") {
-        dispatch(loginSuccess({ mobile }));
-     
+      if (formData.otp === "1234") {
+        dispatch(loginSuccess({ phone: formData.phone }));
         navigate("/");
       } else {
         alert("Invalid OTP");
@@ -61,23 +58,22 @@ const SignIn = () => {
               <div className="step-panel">
                 <label>Mobile Number</label>
                 <PhoneInput
-                  country={"in"}
-                  value={mobile}
-                  onChange={setMobile}
-                  inputClass={errors.mobile ? "error" : ""}
+                  country={formData.countryCode}
+                  value={formData.phone}
+                  onChange={(val, data) => setFormData((prev) => ({ ...prev, phone: val, countryCode: data.countryCode }))}
+                  inputClass={errors.phone ? "error" : ""}
                   inputStyle={{ width: "100%" }}
                   placeholder="Enter phone number"
                 />
-                {errors.mobile && <span className="error-text">{errors.mobile}</span>}
+                {errors.phone && <span className="error-text">{errors.phone}</span>}
               </div>
-
               {/* Step 2: OTP */}
               <div className="step-panel">
                 <label>OTP</label>
                 <input
                   type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  value={formData.otp}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, otp: e.target.value }))}
                   className={errors.otp ? "error" : ""}
                   placeholder="Enter OTP"
                 />
@@ -100,7 +96,7 @@ const SignIn = () => {
 
           <GoogleLogin
             onSuccess={() => {
-              alert("Google Login Success");
+             
               dispatch(loginSuccess({ provider: "google" }));
               navigate("/");
             }}

@@ -88,7 +88,7 @@ useEffect(() => {
     
         <div className="home-tabs">
       {cards.map(({ path, icon, label }) => (
-  <Link
+  <Link 
     key={path}
     to={path}
     onClick={() => setActiveTab(path)}

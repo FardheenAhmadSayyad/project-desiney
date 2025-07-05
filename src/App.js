@@ -29,13 +29,15 @@ function App() {
     <ThemeProvider>
       <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
     <BrowserRouter>
-
+<ScrollToTop /> 
       <div className="app-container">
         <Navbar />
 
         <main className="app-main">
+            
               {showModal && <SignInModal onClose={() => setShowModal(false)} />} 
           <Routes>
+       
             {/* Nested routing under Home */}
             
             <Route path="/" element={<Home />}>
@@ -56,7 +58,7 @@ function App() {
               <Route path="holidays" element={<Holidays />} />
               <Route path="profile" element={<Profile />} />
  
-
+            
             {/* Other routes like Contact */}
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />

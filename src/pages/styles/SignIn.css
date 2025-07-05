@@ -188,3 +188,9 @@
   border: none;
   cursor: pointer;
 }
+.success-message {
+  color: #2ecc71;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+}
